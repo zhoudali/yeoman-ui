@@ -53,7 +53,7 @@ To develop and contribute you can build & install each package seperatly. Instru
 * [Build & install the client](frontend/README.md)
 * [Build & install the backend](backend/README.md)
 * [Build & install the yeoman example generator](generator-foodq/README.md)
-* [inquirer-gui plugins](generator-foodq/README.md)
+* [inquirer-gui plugins](https://github.com/SAP/inquirer-gui/blob/master/PLUGINS.md)
 
 ## Known Issues
 * inquirer.js plugins not supported.
