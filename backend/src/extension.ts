@@ -59,7 +59,6 @@ const server = http.createServer((req : any, res: any) => {
     trackSWA();
     console.log(res.statusCode);
     res.end('matomo');
-
 });
 
 
@@ -70,7 +69,7 @@ function trackSWA() {
 	matomo.track({
 		url: "mysite.com",
 		_id: "asaf.dulberg@sap.com",
-		event_type: "asaftest"
+		event_type: "asaftest1"
 	})
 }
 
@@ -121,8 +120,10 @@ export class YeomanUIPanel {
 
 	public static loadYeomanUI(uiOptions?: any) {
 		const displayedPanel = _.get(YeomanUIPanel, "currentPanel.panel");
-		server.listen(8100);
-		// axios.post("https://webanalytics2.cfapps.eu10.hana.ondemand.com/tracker/log?idsite=acfb4b3c-a451-4e31-bbd5-69e0204951f7&rec=1&_id=2&event_type=asaftest", {},
+		trackSWA();
+		// axios.post("https://webanalytics2.cfapps.eu10.hana.ondemand.com/tracker/log?idsite=acfb4b3c-a451-4e31-bbd5-69e0204951f7&rec=1&_id=2&event_type=asaftest", {
+
+		// },
 		// {
 		// 	headers: {
 		// 		"accept": "application/json",
