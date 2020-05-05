@@ -67,7 +67,7 @@ export class YeomanUIPanel {
 
 	public static loadYeomanUI(uiOptions?: any) {
 		const displayedPanel = _.get(YeomanUIPanel, "currentPanel.panel");
-		SWATracker.trackSWA("static","1");
+		SWATracker.trackSWA("LoadYeomanUI","1");
 		console.log("opened!");
 		if (displayedPanel) {
 			displayedPanel.dispose();

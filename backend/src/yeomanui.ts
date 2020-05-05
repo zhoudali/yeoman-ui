@@ -17,6 +17,7 @@ import Generator = require("yeoman-generator");
 import { GeneratorType, GeneratorFilter } from "./filter";
 import { IChildLogger } from "@vscode-logging/logger";
 import {IPrompt} from "@sap-devx/yeoman-ui-types";
+import { SWATracker } from "./swaTracking";
 
 
 export interface IQuestionsPrompt extends IPrompt{
@@ -258,12 +259,14 @@ export class YeomanUI {
 
   private onGeneratorSuccess(generatorName: string, destinationRoot: string) {
     const message = `The '${generatorName}' project has been generated.`;
+    SWATracker.trackSWA("GeneratorSuccess","1");
     this.logger.debug("done running yeomanui! " + message + ` You can find it at ${destinationRoot}`);
     this.youiEvents.doGeneratorDone(true, message, destinationRoot);
   }
 
   private async onGeneratorFailure(generatorName: string, error: any) {
     const messagePrefix = `${generatorName} generator failed.`;
+    SWATracker.trackSWA("GeneratorFailure","1");
     const errorMessage: string = await this.logError(error, messagePrefix);
     this.youiEvents.doGeneratorDone(false, errorMessage);
   }
