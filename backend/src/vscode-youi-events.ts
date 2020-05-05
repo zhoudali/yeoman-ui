@@ -4,6 +4,7 @@ import { YouiEvents } from "./youi-events";
 import { RpcCommon } from "@sap-devx/webview-rpc/out.ext/rpc-common";
 import { GeneratorFilter, GeneratorType } from './filter';
 
+
 export class VSCodeYouiEvents implements YouiEvents {
     private rpc: RpcCommon;
     private webviewPanel: vscode.WebviewPanel;
@@ -17,6 +18,7 @@ export class VSCodeYouiEvents implements YouiEvents {
     }
 
     public doGeneratorDone(success: boolean, message: string, targetPath: string = ""): void {
+        
         this.doClose();
         this.showDoneMessage(success, message, targetPath);
     }

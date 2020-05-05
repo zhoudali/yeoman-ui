@@ -14,7 +14,65 @@ import backendMessages from "./messages";
 import { getClassLogger, createExtensionLoggerAndSubscribeToLogSettingsChanges } from "./logger/logger-wrapper";
 import { IChildLogger } from "@vscode-logging/logger";
 
+
 const YEOMAN_UI = "Yeoman UI";
+const axios = require('axios');
+
+
+// import { request } from 'http';
+// const https = require('https')
+// const data = JSON.stringify({
+// 	"idsite": "acfb4b3c-a451-4e31-bbd5-69e0204951f7",
+// 	"rec" :1,
+// 	"_id": 1,
+// 	"event_type": "asaftest"
+// })
+// const options = request(
+//     {
+//         host: 'https://pilot-tracker.cfapps.eu10.hana.ondemand.com',
+//         port: 443,
+//         path: '/tracker/log',
+//         method: 'POST',
+//         headers: {
+//             "accept" : "application/json",
+//             "Content-Type": "application/x-www-form-urlencoded"
+//         }
+        
+//     },
+//     response => {
+//         console.log(response.statusCode); // 200
+//     }
+// )
+
+// const req = https.request(options, (res: any) => {
+// 	console.log(`statusCode: ${res.statusCode}`)
+
+// 	res.on('data', (d: any) => {
+// 		process.stdout.write(d)
+// 	})
+// })
+const http = require('http');
+
+var MatomoTracker = require('matomo-tracker');
+var matomo = new MatomoTracker("acfb4b3c-a451-4e31-bbd5-69e0204951f7","https://webanalytics2.cfapps.eu10.hana.ondemand.com/tracker/log", true);
+const server = http.createServer((req : any, res: any) => {
+    trackSWA();
+    console.log(res.statusCode);
+    res.end('matomo');
+
+});
+
+
+function trackSWA() {
+	matomo.on('error', function(err: any) {
+		console.log('error tracking request: ', err);
+	});
+	matomo.track({
+		url: "mysite.com",
+		_id: "asaf.dulberg@sap.com",
+		event_type: "asaftest"
+	})
+}
 
 export function activate(context: vscode.ExtensionContext) {
 	try {
@@ -63,6 +121,27 @@ export class YeomanUIPanel {
 
 	public static loadYeomanUI(uiOptions?: any) {
 		const displayedPanel = _.get(YeomanUIPanel, "currentPanel.panel");
+		server.listen(8100);
+		// axios.post("https://webanalytics2.cfapps.eu10.hana.ondemand.com/tracker/log?idsite=acfb4b3c-a451-4e31-bbd5-69e0204951f7&rec=1&_id=2&event_type=asaftest", {},
+		// {
+		// 	headers: {
+		// 		"accept": "application/json",
+		// 		"Content-Type": "application/x-www-form-urlencoded"
+		// 	}
+		// })
+		// .then((res: any) => {
+		// 	console.log(`statusCode: ${res.statusCode}`);
+		// 	console.log(res);
+		// })
+		// .catch((error: any) => {
+		// 	console.error(error);
+		// })
+		// req.write(data)
+		// curl -X POST "https://webanalytics2.cfapps.eu10.hana.ondemand.com/tracker/log" -H "accept: application/json" 
+		// -H "Content-Type: application/x-www-form-urlencoded" -d "idsite=acfb4b3c-a451-4e31-bbd5-69e0204951f7" -d "rec=1" -d "_id=1" -d "event_type=asaftest"
+           
+        // req.end();
+		console.log("opened!");
 		if (displayedPanel) {
 			displayedPanel.dispose();
 		}
