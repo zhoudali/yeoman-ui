@@ -79,6 +79,7 @@ export class YeomanUI {
 		this.rpc.registerMethod({ func: this.getState, thisArg: this });
 
 		this.uiOptions = uiOptions;
+		this.uiOptions.filter = GeneratorFilter.create({types: [GeneratorType.project]});
 		this.youiAdapter = new YouiAdapter(youiEvents, output);
 		this.youiAdapter.setYeomanUI(this);
 		this.promptCount = 0;

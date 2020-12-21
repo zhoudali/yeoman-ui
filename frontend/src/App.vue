@@ -140,7 +140,6 @@ import LoginPlugin from "@sap-devx/inquirer-gui-login-plugin";
 import TilesPlugin from "@sap-devx/inquirer-gui-tiles-plugin";
 import { Severity } from "@sap-devx/yeoman-ui-types";
 
-
 const FUNCTION = "__Function";
 const PENDING = "pending";
 const EVALUATING = "evaluating";
@@ -175,7 +174,7 @@ function initialState() {
     toShowPromptMessage: false,
     promptMessageClass: "",
     promptMessageIcon: null,
-    messageMaxLength: 100
+    messageMaxLength: 100,
   };
 }
 
@@ -200,8 +199,12 @@ export default {
       return "Back";
     },
     nextButtonText() {
-      if ((!this.selectGeneratorPromptExists() && this.promptIndex === (_.size(this.promptsInfoToDisplay) - 1)) || 
-        (this.selectGeneratorPromptExists() && this.promptIndex > 0 && this.promptIndex === _.size(this.promptsInfoToDisplay)) ||
+      if (
+        (!this.selectGeneratorPromptExists() &&
+          this.promptIndex === _.size(this.promptsInfoToDisplay) - 1) ||
+        (this.selectGeneratorPromptExists() &&
+          this.promptIndex > 0 &&
+          this.promptIndex === _.size(this.promptsInfoToDisplay)) ||
         this.isWriting
       ) {
         return "Finish";
@@ -350,11 +353,15 @@ export default {
     },
     selectGeneratorPromptExists() {
       const firstPromptQuestions = _.get(this, "prompts[0].questions", []);
-      return !_.isNil(_.find(firstPromptQuestions, question => {
-        return _.get(question, "name") === "generator" && 
-              _.get(question, "type") === "list" && 
-              _.get(question, "guiType") === "tiles";
-      }));
+      return !_.isNil(
+        _.find(firstPromptQuestions, (question) => {
+          return (
+            _.get(question, "name") === "generator" &&
+            _.get(question, "type") === "list" &&
+            _.get(question, "guiType") === "tiles"
+          );
+        })
+      );
     },
     setPromptList(prompts) {
       let promptIndex = this.promptIndex;
@@ -368,17 +375,17 @@ export default {
 
       // replace all existing prompts except 1st (generator selection) and current prompt
       // The index at which to start changing the array.
-      let startIndex = promptIndex; 
+      let startIndex = promptIndex;
       if (this.selectGeneratorPromptExists()) {
         startIndex = promptIndex + 1;
       }
-      
-      // The number of elements in the array to remove from startIndex
-      const deleteCount = _.size(this.prompts) - promptIndex; 
 
-      let itemsToInsert; 
+      // The number of elements in the array to remove from startIndex
+      const deleteCount = _.size(this.prompts) - promptIndex;
+
+      let itemsToInsert;
       if (this.selectGeneratorPromptExists() || promptIndex === 0) {
-        itemsToInsert = prompts.splice(promptIndex, _.size(prompts));       
+        itemsToInsert = prompts.splice(promptIndex, _.size(prompts));
       } else {
         startIndex = promptIndex + 1;
         itemsToInsert = prompts.splice(startIndex, _.size(prompts));
@@ -473,8 +480,13 @@ export default {
         );
         promptName = _.get(this.messages, "select_generator_name");
       } else {
-        const promptIndex = this.selectGeneratorPromptExists() ? (this.promptIndex - 1) : this.promptIndex;
-        const promptToDisplay = _.get(this.promptsInfoToDisplay, `[${promptIndex}]`);
+        const promptIndex = this.selectGeneratorPromptExists()
+          ? this.promptIndex - 1
+          : this.promptIndex;
+        const promptToDisplay = _.get(
+          this.promptsInfoToDisplay,
+          `[${promptIndex}]`
+        );
         promptDescription = _.get(promptToDisplay, "description", "");
         promptName = _.get(promptToDisplay, "name", name);
       }
@@ -500,12 +512,17 @@ export default {
       this.doneStatus = true;
       this.isDone = true;
     },
-    generatorDone(succeeded, message, targetPath) {
+    generatorDone(succeeded, message, targetPath, redirectUrl) {
       this.currentPrompt.name = "Summary";
       this.doneMessage = message;
       this.donePath = targetPath;
       this.doneStatus = succeeded;
       this.isDone = true;
+      if (redirectUrl) {
+        const res = window.open("", "_blank");
+        res.location.replace(redirectUrl);
+        window.close();
+      }
     },
     runGenerator(generatorName) {
       this.rpc.invoke("runGenerator", [generatorName]);

@@ -18,7 +18,8 @@ export class ServerYouiEvents implements YouiEvents {
     }
 
     doGeneratorDone(suceeded: boolean, message: string, targetPath = ""): void {
-        this.rpc.invoke("generatorDone", [suceeded, message, targetPath]);
+        const baseUrl = process.env["WS_BASE_URL"];
+        this.rpc.invoke("generatorDone", [suceeded, message, targetPath, `${baseUrl}#/home/user/projects`]);
     }
 
     public doGeneratorInstall(): void {
