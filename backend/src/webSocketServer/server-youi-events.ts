@@ -18,7 +18,7 @@ export class ServerYouiEvents implements YouiEvents {
     }
 
     doGeneratorDone(suceeded: boolean, message: string, targetPath = ""): void {
-        const baseUrl = process.env["WS_BASE_URL"];
+        const baseUrl = process.env["WS_BASE_URL"].replace(".", "-theia.");
         this.rpc.invoke("generatorDone", [suceeded, message, targetPath, `${baseUrl}#/home/user/projects`]);
     }
 
